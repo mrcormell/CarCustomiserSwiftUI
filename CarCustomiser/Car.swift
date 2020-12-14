@@ -11,7 +11,7 @@ struct Car {
     let make: String
     let model: String
     var topSpeed: Int
-    let acceleration: Double
+    var acceleration: Double
     var handling: Int
     
     func displayStats() -> String {

@@ -19,7 +19,10 @@ struct ContentView: View {
     
     @State private var exhaustPackage = false
     @State private var tiresPackage = false
-    @State private var remainingFunds = 750
+    @State private var driveTrainPackage = false
+    @State private var ecuFuelPackage = false
+    
+    @State private var remainingFunds = 1000
 
     var exhaustPackageEnabled: Bool {
         if exhaustPackage == true {
@@ -45,16 +48,40 @@ struct ContentView: View {
         }
     }
     
+    var driveTrainPackageEnabled: Bool {
+        if driveTrainPackage == true {
+            return true
+        } else {
+            if remainingFunds >= 500 {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    var ecuFuelPackageEnabled: Bool {
+        if ecuFuelPackage == true {
+            return true
+        } else {
+            if remainingFunds >= 1000 {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
     var body: some View {
         let exhaustPackageBinding = Binding<Bool> (
             get: { self.exhaustPackage },
             set: { newValue in
                 self.exhaustPackage = newValue
                 if newValue == true {
-                    starterCars.cars[selectedCar].topSpeed += 5
+                    starterCars.cars[selectedCar].acceleration -= 1
                     remainingFunds -= 500
                 } else {
-                    starterCars.cars[selectedCar].topSpeed -= 5
+                    starterCars.cars[selectedCar].acceleration += 1
                     remainingFunds += 500
                 }
             })
@@ -72,6 +99,34 @@ struct ContentView: View {
                 }
             })
         
+        let driveTrainPackageBinding = Binding<Bool> (
+            get: { self.driveTrainPackage },
+            set: { newValue in
+                self.driveTrainPackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].topSpeed += 5
+                    remainingFunds -= 500
+                } else {
+                    starterCars.cars[selectedCar].topSpeed -= 5
+                    remainingFunds += 500
+                }
+            })
+        
+        let ecuFuelPackageBinding = Binding<Bool> (
+            get: { self.ecuFuelPackage },
+            set: { newValue in
+                self.ecuFuelPackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].topSpeed += 3
+                    starterCars.cars[selectedCar].acceleration -= 1.5
+                    remainingFunds -= 1000
+                } else {
+                    starterCars.cars[selectedCar].topSpeed -= 3
+                    starterCars.cars[selectedCar].acceleration += 1.5
+                    remainingFunds += 1000
+                }
+            })
+        
         VStack {
             Form {
                 VStack(alignment: .leading, spacing: 20) {
@@ -82,10 +137,14 @@ struct ContentView: View {
                     })
                 }
                 Section {
-                    Toggle("Exhaust Package", isOn: exhaustPackageBinding)
+                    Toggle("Exhaust Package (Cost: 500)", isOn: exhaustPackageBinding)
                         .disabled(!exhaustPackageEnabled)
-                    Toggle("Tires Package", isOn: tiresPackageBinding)
+                    Toggle("Tires Package (Cost: 500)", isOn: tiresPackageBinding)
                         .disabled(!tiresPackageEnabled)
+                    Toggle("Drivetrain Package (Cost: 500)", isOn: driveTrainPackageBinding)
+                        .disabled(!driveTrainPackageEnabled)
+                    Toggle("ECU & Fuel Package (Cost: 1000)", isOn: ecuFuelPackageBinding)
+                        .disabled(!ecuFuelPackageEnabled)
                 }
 
             }
@@ -99,6 +158,8 @@ struct ContentView: View {
         remainingFunds = 1000
         exhaustPackage = false
         tiresPackage = false
+        driveTrainPackage = false
+        ecuFuelPackage = false
         starterCars = StarterCars()
     }
 }
