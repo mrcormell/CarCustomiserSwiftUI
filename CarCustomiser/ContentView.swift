@@ -54,6 +54,7 @@ struct ContentView: View {
                     Text(starterCars.cars[selectedCar].displayStats())
                     Button("Next Car", action: {
                         selectedCar += 1
+                        resetDisplay()
                     })
                 }
                 Section {
@@ -66,6 +67,13 @@ struct ContentView: View {
                 .baselineOffset(20)
                 .foregroundColor(.red)
         }
+    }
+    
+    func resetDisplay() {
+        remainingFunds = 1000
+        exhaustPackage = false
+        tiresPackage = false
+        starterCars = StarterCars()
     }
 }
 
