@@ -17,12 +17,23 @@ struct ContentView: View {
         }
     }
     
+    @State private var exhaustPackage = false
+    @State private var tiresPackage = false
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text(starterCars.cars[selectedCar].displayStats())
-            Button("Next Car", action: {
-                selectedCar += 1
-            })
+        
+        Form {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(starterCars.cars[selectedCar].displayStats())
+                Button("Next Car", action: {
+                    selectedCar += 1
+                })
+            }
+            Section {
+                Toggle("Exhaust Package", isOn: $exhaustPackage)
+                Toggle("Tires Package", isOn: $tiresPackage)
+            }
+
         }
         
     }
