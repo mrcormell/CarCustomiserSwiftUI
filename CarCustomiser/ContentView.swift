@@ -19,6 +19,7 @@ struct ContentView: View {
     
     @State private var exhaustPackage = false
     @State private var tiresPackage = false
+    @State private var remainingFunds = 1000
     
     var body: some View {
         let exhaustPackageBinding = Binding<Bool> (
@@ -27,8 +28,10 @@ struct ContentView: View {
                 self.exhaustPackage = newValue
                 if newValue == true {
                     starterCars.cars[selectedCar].topSpeed += 5
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].topSpeed -= 5
+                    remainingFunds += 500
                 }
             })
         
@@ -38,25 +41,31 @@ struct ContentView: View {
                 self.tiresPackage = newValue
                 if newValue == true {
                     starterCars.cars[selectedCar].handling += 2
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].handling -= 2
+                    remainingFunds += 500
                 }
             })
         
-        Form {
-            VStack(alignment: .leading, spacing: 20) {
-                Text(starterCars.cars[selectedCar].displayStats())
-                Button("Next Car", action: {
-                    selectedCar += 1
-                })
-            }
-            Section {
-                Toggle("Exhaust Package", isOn: exhaustPackageBinding)
-                Toggle("Tires Package", isOn: tiresPackageBinding)
-            }
+        VStack {
+            Form {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(starterCars.cars[selectedCar].displayStats())
+                    Button("Next Car", action: {
+                        selectedCar += 1
+                    })
+                }
+                Section {
+                    Toggle("Exhaust Package", isOn: exhaustPackageBinding)
+                    Toggle("Tires Package", isOn: tiresPackageBinding)
+                }
 
+            }
+            Text("Remaining Funds: \(remainingFunds)")
+                .baselineOffset(20)
+                .foregroundColor(.red)
         }
-        
     }
 }
 
