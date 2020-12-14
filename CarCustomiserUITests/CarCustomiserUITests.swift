@@ -22,13 +22,20 @@ class CarCustomiserUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
+    func testWhenBoughtTiresAndExhaustPackageOtherTwoUpgradesAreDisabled() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
+        
+        
+        //arrange
+        let tablesQuery = app.tables
+        tablesQuery/*@START_MENU_TOKEN@*/.switches["Exhaust Package (Cost: 500)"]/*[[".cells[\"Exhaust Package (Cost: 500)\"].switches[\"Exhaust Package (Cost: 500)\"]",".switches[\"Exhaust Package (Cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.switches["Tires Package (Cost: 500)"]/*[[".cells[\"Tires Package (Cost: 500)\"].switches[\"Tires Package (Cost: 500)\"]",".switches[\"Tires Package (Cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
 
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        //assert
+        XCTAssertEqual(tablesQuery.switches["Drivetrain Package (Cost: 500)"].isEnabled, false)
+        XCTAssertEqual(tablesQuery.switches["ECU & Fuel Package (Cost: 1000)"].isEnabled, false)
     }
 
     func testLaunchPerformance() throws {
