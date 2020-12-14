@@ -10,9 +10,9 @@ import Foundation
 struct Car {
     let make: String
     let model: String
-    let topSpeed: Int
+    var topSpeed: Int
     let acceleration: Double
-    let handling: Int
+    var handling: Int
     
     func displayStats() -> String {
         return """

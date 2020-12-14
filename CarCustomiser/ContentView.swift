@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let starterCars: StarterCars = StarterCars()
+    @State private var starterCars: StarterCars = StarterCars()
     @State private var selectedCar: Int = 0 {
         didSet {
             if oldValue >= starterCars.cars.count - 1 {
@@ -21,6 +21,27 @@ struct ContentView: View {
     @State private var tiresPackage = false
     
     var body: some View {
+        let exhaustPackageBinding = Binding<Bool> (
+            get: { self.exhaustPackage },
+            set: { newValue in
+                self.exhaustPackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].topSpeed += 5
+                } else {
+                    starterCars.cars[selectedCar].topSpeed -= 5
+                }
+            })
+        
+        let tiresPackageBinding = Binding<Bool> (
+            get: { self.tiresPackage },
+            set: { newValue in
+                self.tiresPackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].handling += 2
+                } else {
+                    starterCars.cars[selectedCar].handling -= 2
+                }
+            })
         
         Form {
             VStack(alignment: .leading, spacing: 20) {
@@ -30,8 +51,8 @@ struct ContentView: View {
                 })
             }
             Section {
-                Toggle("Exhaust Package", isOn: $exhaustPackage)
-                Toggle("Tires Package", isOn: $tiresPackage)
+                Toggle("Exhaust Package", isOn: exhaustPackageBinding)
+                Toggle("Tires Package", isOn: tiresPackageBinding)
             }
 
         }
