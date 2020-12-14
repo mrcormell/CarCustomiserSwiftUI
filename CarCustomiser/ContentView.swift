@@ -19,7 +19,31 @@ struct ContentView: View {
     
     @State private var exhaustPackage = false
     @State private var tiresPackage = false
-    @State private var remainingFunds = 1000
+    @State private var remainingFunds = 750
+
+    var exhaustPackageEnabled: Bool {
+        if exhaustPackage == true {
+            return true
+        } else {
+            if remainingFunds >= 500 {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    var tiresPackageEnabled: Bool {
+        if tiresPackage == true {
+            return true
+        } else {
+            if remainingFunds >= 500 {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
     
     var body: some View {
         let exhaustPackageBinding = Binding<Bool> (
@@ -59,7 +83,9 @@ struct ContentView: View {
                 }
                 Section {
                     Toggle("Exhaust Package", isOn: exhaustPackageBinding)
+                        .disabled(!exhaustPackageEnabled)
                     Toggle("Tires Package", isOn: tiresPackageBinding)
+                        .disabled(!tiresPackageEnabled)
                 }
 
             }
