@@ -21,11 +21,16 @@ struct ContentView: View {
     @State private var tiresPackage = false
     @State private var driveTrainPackage = false
     @State private var ecuFuelPackage = false
-    
+    @State private var nextCarButton = true
     @State private var remainingFunds = 1000
+    @State private var timeRemaining = 30
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var exhaustPackageEnabled: Bool {
-        if exhaustPackage == true {
+        if timeRemaining <= 0 {
+            return false
+        } else if exhaustPackage == true {
             return true
         } else {
             if remainingFunds >= 500 {
@@ -37,7 +42,9 @@ struct ContentView: View {
     }
     
     var tiresPackageEnabled: Bool {
-        if tiresPackage == true {
+        if timeRemaining <= 0 {
+            return false
+        } else if tiresPackage == true {
             return true
         } else {
             if remainingFunds >= 500 {
@@ -49,7 +56,9 @@ struct ContentView: View {
     }
     
     var driveTrainPackageEnabled: Bool {
-        if driveTrainPackage == true {
+        if timeRemaining <= 0 {
+            return false
+        } else if driveTrainPackage == true {
             return true
         } else {
             if remainingFunds >= 500 {
@@ -61,7 +70,9 @@ struct ContentView: View {
     }
     
     var ecuFuelPackageEnabled: Bool {
-        if ecuFuelPackage == true {
+        if timeRemaining <= 0 {
+            return false
+        } else if ecuFuelPackage == true {
             return true
         } else {
             if remainingFunds >= 1000 {
@@ -71,6 +82,8 @@ struct ContentView: View {
             }
         }
     }
+    
+    
     
     var body: some View {
         let exhaustPackageBinding = Binding<Bool> (
@@ -128,6 +141,15 @@ struct ContentView: View {
             })
         
         VStack {
+            Text("\(timeRemaining)")
+                .onReceive(timer) { _ in
+                    if self.timeRemaining > 0 {
+                        self.timeRemaining -= 1
+                    } else {
+                        nextCarButton = false
+                    }
+                }
+                .foregroundColor(.red)
             Form {
                 VStack(alignment: .leading, spacing: 20) {
                     Text(starterCars.cars[selectedCar].displayStats())
@@ -135,6 +157,7 @@ struct ContentView: View {
                         selectedCar += 1
                         resetDisplay()
                     })
+                    .disabled(!nextCarButton)
                 }
                 Section {
                     Toggle("Exhaust Package (Cost: 500)", isOn: exhaustPackageBinding)
@@ -161,6 +184,10 @@ struct ContentView: View {
         driveTrainPackage = false
         ecuFuelPackage = false
         starterCars = StarterCars()
+    }
+    
+    func lockDisplay() {
+        nextCarButton = false
     }
 }
 
