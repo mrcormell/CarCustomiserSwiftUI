@@ -29,13 +29,19 @@ class CarCustomiserUITests: XCTestCase {
         
         
         //arrange
-        let tablesQuery = app.tables
-        tablesQuery/*@START_MENU_TOKEN@*/.switches["Exhaust Package (Cost: 500)"]/*[[".cells[\"Exhaust Package (Cost: 500)\"].switches[\"Exhaust Package (Cost: 500)\"]",".switches[\"Exhaust Package (Cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        tablesQuery/*@START_MENU_TOKEN@*/.switches["Tires Package (Cost: 500)"]/*[[".cells[\"Tires Package (Cost: 500)\"].switches[\"Tires Package (Cost: 500)\"]",".switches[\"Tires Package (Cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app/*@START_MENU_TOKEN@*/.switches["Exhaust Package (Cost: 500)"]/*[[".cells[\"Exhaust Package (Cost: 500)\"].switches[\"Exhaust Package (Cost: 500)\"]",".switches[\"Exhaust Package (Cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app/*@START_MENU_TOKEN@*/.switches["Tires Package (Cost: 500)"]/*[[".cells[\"Tires Package (Cost: 500)\"].switches[\"Tires Package (Cost: 500)\"]",".switches[\"Tires Package (Cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        //taking a screenshot
+        let screenshot = app.firstMatch.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot)
+        attachment.name = "App showing bottom two upgrades disabled"
+        attachment.lifetime = .keepAlways
+        add(attachment)
 
         //assert
-        XCTAssertEqual(tablesQuery.switches["Drivetrain Package (Cost: 500)"].isEnabled, false)
-        XCTAssertEqual(tablesQuery.switches["ECU & Fuel Package (Cost: 1000)"].isEnabled, false)
+        XCTAssertEqual(app.switches["Drivetrain Package (Cost: 500)"].isEnabled, false)
+        XCTAssertEqual(app.switches["ECU & Fuel Package (Cost: 1000)"].isEnabled, false)
     }
 
     func testLaunchPerformance() throws {
